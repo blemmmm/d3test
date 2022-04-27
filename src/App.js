@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import * as d3 from "d3";
+import data from "./temperature.csv";
+import BarChart from "./BarChart";
 
-function App() {
+const dimensions = {
+  width: 800,
+  height: 400,
+  margin: { top: 30, right: 30, bottom: 30, left: 60 },
+};
+
+export default function App() {
+  const [tempData, setTempData] = useState(null);
+
+  useEffect(() => {
+    d3.csv(data).then((data) => setTempData(data));
+  }, []);
+
+  console.log(tempData instanceof Array);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ paddingTop: "50px" }}>
+      {tempData instanceof Array && (
+        <BarChart dimensions={dimensions} tempData={tempData} />
+      )}
     </div>
   );
 }
-
-export default App;
